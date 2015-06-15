@@ -1,7 +1,5 @@
 # Wild_Barley_Diversity-2013
-These scripts were used for read mapping for samples located in ~/Project/WBDC.
-
-The scripts are located in ~/Jobs/Wild_Barley_Diversity.
+These scripts were used for read mapping for samples located in ~/Project/WBDC. The scripts are located in ~/Jobs/Wild_Barley_Diversity.
 
 The WBDC_103_2013-11-20.job script takes fastq.gz files and outputs .sam files.
 
