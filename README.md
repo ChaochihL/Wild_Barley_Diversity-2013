@@ -1,5 +1,5 @@
 # Wild_Barley_Diversity-2013
-These scripts were used for read mapping for Wild Barley Diversity Collection samples.
+These scripts were written by Tom Kono and used for read mapping for Wild Barley Diversity Collection samples.
 
 The WBDC_103_2013-11-20.job script takes fastq.gz files and outputs .sam files.
 
