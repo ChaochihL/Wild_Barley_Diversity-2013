@@ -1,0 +1,84 @@
+#!/bin/sh
+
+#PBS -l mem=16000mb,nodes=1:ppn=1,walltime=72:00:00 
+#PBS -m abe 
+#PBS -M liux1299@umn.edu 
+#PBS -q lab
+
+#	The root of where we will work
+PROJECT_DIR=${HOME}/Projects/WBDC
+#	The capture we are working with
+#	The program we are using
+MERGESAM=${HOME}/Soft/picard-tools-1.103/MergeSamFiles.jar
+CLEANSAM=${HOME}/Soft/picard-tools-1.103/CleanSam.jar
+
+#	The files we are going to merge
+RASMUSSON=Rasmusson/Rasmusson_2014-01-21_Finished_Realigned.bam
+WBDC_103=WBDC_103/WBDC_103_2013-11-20_Finished_Realigned.bam
+WBDC_115=WBDC_115/WBDC_115_2013-11-20_Finished_Realigned.bam
+WBDC_142=WBDC_142/WBDC_142_2013-11-20_Finished_Realigned.bam
+WBDC_150=WBDC_150/WBDC_150_2013-11-20_Finished_Realigned.bam
+WBDC_16=WBDC_16/WBDC_16_2013-11-20_Finished_Realigned.bam
+WBDC_172=WBDC_172/WBDC_172_2013-11-20_Finished_Realigned.bam
+WBDC_173=WBDC_173/WBDC_173_2013-11-20_Finished_Realigned.bam
+WBDC_182=WBDC_182/WBDC_182_2013-11-20_Finished_Realigned.bam
+WBDC_20=WBDC_20/WBDC_20_2013-11-20_Finished_Realigned.bam
+WBDC_227=WBDC_227/WBDC_227_2013-11-20_Finished_Realigned.bam
+WBDC_234=WBDC_234/WBDC_234_2013-11-20_Finished_Realigned.bam
+WBDC_255=WBDC_255/WBDC_255_2013-11-20_Finished_Realigned.bam
+WBDC_28=WBDC_28/WBDC_28_2013-11-20_Finished_Realigned.bam
+WBDC_292=WBDC_292/WBDC_292_2013-11-20_Finished_Realigned.bam
+WBDC_302=WBDC_302/WBDC_302_2013-11-20_Finished_Realigned.bam
+WBDC_32=WBDC_32/WBDC_32_2013-11-20_Finished_Realigned.bam
+WBDC_336=WBDC_336/WBDC_336_2013-11-20_Finished_Realigned.bam
+WBDC_340=WBDC_340/WBDC_340_2013-11-21_Finished_Realigned.bam
+WBDC_348=WBDC_348/WBDC_348_2013-11-21_Finished_Realigned.bam
+WBDC_35=WBDC_35/WBDC_35_2013-11-21_Finished_Realigned.bam
+WBDC_350=WBDC_350/WBDC_350_2013-11-21_Finished_Realigned.bam
+WBDC_42=WBDC_42/WBDC_42_2013-11-21_Finished_Realigned.bam
+WBDC_82=WBDC_82/WBDC_82_2013-11-21_Finished_Realigned.bam
+WBDC_92=WBDC_92/WBDC_92_2013-11-21_Finished_Realigned.bam
+
+#	cd into the directory
+cd ${PROJECT_DIR}
+
+#	Merge the alignments
+java -Xmx15g -XX:MaxPermSize=10g -jar\
+	${MERGESAM}\
+	INPUT=${RASMUSSON}\
+	INPUT=${WBDC_115}\
+	INPUT=${WBDC_142}\
+	INPUT=${WBDC_150}\
+	INPUT=${WBDC_16}\
+	INPUT=${WBDC_172}\
+	INPUT=${WBDC_173}\
+	INPUT=${WBDC_182}\
+	INPUT=${WBDC_20}\
+	INPUT=${WBDC_227}\
+	INPUT=${WBDC_234}\
+	INPUT=${WBDC_255}\
+	INPUT=${WBDC_28}\
+	INPUT=${WBDC_292}\
+	INPUT=${WBDC_302}\
+	INPUT=${WBDC_32}\
+	INPUT=${WBDC_336}\
+	INPUT=${WBDC_340}\
+	INPUT=${WBDC_348}\
+	INPUT=${WBDC_35}\
+	INPUT=${WBDC_350}\
+	INPUT=${WBDC_42}\
+	INPUT=${WBDC_82}\
+	INPUT=${WBDC_92}\
+	OUTPUT=LianaPop_AllSamples_2013-11-20.bam\
+	CREATE_INDEX=true\
+	SORT_ORDER=coordinate\
+	TMP_DIR=${HOME}/Scratch/Picard_Tmp
+
+#	We have to use CleanSam because some of the reads have a strange form after being
+#	realigned. They might hang off the edge of a contig, and CleanSam will softmask
+#	them, so that they don't interfere with other tools.
+#java -Xmx15g -XX:MaxPermSize=10g -jar\
+#	${CLEANSAM}\
+#	INPUT=${CAPTURE}_AllSamples_2014-01-02.bam\
+#	OUTPUT=${CAPTURE}_AllSamples_2014-01-02_Clean.bam\
+#	CREATE_INDEX=true

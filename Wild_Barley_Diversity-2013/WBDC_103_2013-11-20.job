@@ -1,0 +1,43 @@
+#!/bin/sh
+
+#PBS -l mem=6000mb,nodes=1:ppn=8,walltime=3:00:00 
+#PBS -m abe 
+#PBS -M liux1299@umn.edu 
+#PBS -q lab
+
+#	The aligner command
+PROGRAM=${HOME}/Shared/Software/bwa-0.7.8/bwa
+#	My project space folder
+PROJECT_DIR=${HOME}/Projects/WBDC
+#	The directory for the reference sequence
+REF_DIR=/home/morrellp/shared/References/Reference_Sequences/Barley/Morex
+#	The sample I am aligning
+SAMPLE="WBDC_103"
+#	The facility that did the capture
+#	The directory with the reads
+READS_DIR=~/Shared/Datasets/NGS/Barley_Exome/Liana_WildBarley_Population
+YMD=`date +%Y-%m-%d`
+
+#	CHANGES
+#       2013-10-11
+#		Initial Alignment
+#       Using parameters
+#           -t 8: Use 8 threads
+#           -k 25: Seed length 25
+#           -r 1.0: Re-seed if match is greater than 1.0 * seed length
+#           -M : mark split hits as secondary
+#           -T 80: only output alignments greater than score 80
+#               This should capture only reads with less than five mismatches
+#		2013-10-25
+#			Paralogue problems!
+#			Changing seed length to 10
+#			Increasing the score cutoff to 85
+#			
+mkdir -p ${PROJECT_DIR}/${SAMPLE}
+cd ${PROJECT_DIR}/${SAMPLE}
+#	Now we run the program with all our options
+$PROGRAM mem -t 8 -k 10 -r 1.0 -M -T 85\
+	${REF_DIR}/bwa_MorexRef\
+    ${READS_DIR}/${SAMPLE}/Forward_ScytheTrimmed.fastq.gz \
+    ${READS_DIR}/${SAMPLE}/Reverse_ScytheTrimmed.fastq.gz > \
+	${SAMPLE}_${YMD}.sam
